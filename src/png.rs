@@ -4,7 +4,7 @@ use anyhow::bail;
 
 use crate::{chunk::Chunk, chunk_type::ChunkType};
 
-struct Png {
+pub struct Png {
   chunks: Vec<Chunk>,
 }
 
@@ -14,10 +14,10 @@ impl Png {
   fn from_chunks(chunks: Vec<Chunk>) -> Png {
     Png { chunks }
   }
-  fn append_chunk(&mut self, chunk: Chunk) {
+  pub fn append_chunk(&mut self, chunk: Chunk) {
     self.chunks.push(chunk)
   }
-  fn remove_chunk(&mut self, chunk_type: &str) -> super::Result<Chunk> {
+  pub fn remove_chunk(&mut self, chunk_type: &str) -> super::Result<Chunk> {
     let chunk_type = ChunkType::from_str(chunk_type)?;
     let index = self.chunks.iter().position(|chunk| chunk.chunk_type() == &chunk_type);
     match index {
@@ -28,17 +28,17 @@ impl Png {
   fn header(&self) -> &[u8; 8] {
     &Self::STANDARD_HEADER
   }
-  fn chunks(&self) -> &[Chunk] {
+  pub fn chunks(&self) -> &[Chunk] {
     &self.chunks
   }
-  fn chunk_by_type(&self, chunk_type: &str) -> Option<&Chunk> {
+  pub fn chunk_by_type(&self, chunk_type: &str) -> Option<&Chunk> {
     let chunk_type = ChunkType::from_str(chunk_type);
     match chunk_type {
       Ok(chunk_type) => self.chunks.iter().find(|chunk| chunk.chunk_type() == &chunk_type),
       Err(_) => None,
     }
   }
-  fn as_bytes(&self) -> Vec<u8> {
+  pub fn as_bytes(&self) -> Vec<u8> {
     let mut res = vec![];
 
     res.extend_from_slice(self.header());
@@ -90,7 +90,6 @@ mod tests {
   use super::*;
   use crate::chunk_type::ChunkType;
   use crate::chunk::Chunk;
-  use std::str::FromStr;
   use std::convert::TryFrom;
 
   fn testing_chunks() -> Vec<Chunk> {
@@ -109,8 +108,6 @@ mod tests {
   }
 
   fn chunk_from_strings(chunk_type: &str, data: &str) -> crate::Result<Chunk> {
-    use std::str::FromStr;
-
     let chunk_type = ChunkType::from_str(chunk_type)?;
     let data: Vec<u8> = data.bytes().collect();
 

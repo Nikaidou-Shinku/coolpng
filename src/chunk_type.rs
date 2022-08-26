@@ -7,6 +7,7 @@ pub struct ChunkType {
   name: [u8; 4],
 }
 
+#[allow(dead_code)]
 impl ChunkType {
   pub fn bytes(&self) -> [u8; 4] {
     self.name
@@ -66,7 +67,7 @@ impl str::FromStr for ChunkType {
   fn from_str(s: &str) -> super::Result<Self> {
     let bytes = s.as_bytes();
     if bytes.len() != 4 {
-      bail!("Invalid length");
+      bail!("Invalid length for chunk type name");
     }
     for item in bytes {
       if !item.is_ascii_alphabetic() {

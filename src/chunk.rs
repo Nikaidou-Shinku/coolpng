@@ -14,6 +14,7 @@ pub struct Chunk {
   crc: u32,
 }
 
+#[allow(dead_code)]
 impl Chunk {
   pub fn new(chunk_type: ChunkType, data: Vec<u8>) -> Chunk {
     let mut check_data = chunk_type.bytes().to_vec();
@@ -56,7 +57,7 @@ impl Chunk {
 impl fmt::Display for Chunk {
   fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
     let res = self.data_as_string().unwrap_or("Data is not a string".to_string());
-    write!(f, "{}", res)
+    write!(f, "[{}] {}", self.chunk_type(), res)
   }
 }
 
