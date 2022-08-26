@@ -3,12 +3,12 @@ use std::{fmt, str};
 use anyhow::bail;
 
 #[derive(Debug)]
-struct ChunkType {
+pub struct ChunkType {
   name: [u8; 4],
 }
 
 impl ChunkType {
-  fn bytes(&self) -> [u8; 4] {
+  pub fn bytes(&self) -> [u8; 4] {
     self.name
   }
   fn is_valid(&self) -> bool {
